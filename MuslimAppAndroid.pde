@@ -1,6 +1,7 @@
 import cassette.audiofiles.*;
 import java.util.Calendar; //Import Calendar Functions
-
+import android.media.MediaPlayer; 
+import android.content.res.AssetFileDescriptor; 
 import android.view.MotionEvent;
 
 import ketai.ui.*;
@@ -10,12 +11,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.text.Editable;
 import android.widget.EditText;
-Activity act;
 
 KetaiGesture gesture;
 
+MediaPlayer mp; 
+Context context; 
+Activity act; 
+AssetFileDescriptor afd;
+Activity sound;
+
 Calendar cal = Calendar.getInstance(); //Get calendar date
-SoundFile athan; //Define Sound Varible
 CompassManager compass;
 PFont font; //Define Font  variable
 PImage home, prayer, img, compasss; //Define image varibles
@@ -25,7 +30,6 @@ boolean fajrStat;
 String[] week = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}, months = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}, times;
 String fajrHour, fajrMinute, duhurHour, duhurMinute, asrHour, asrMinute, maghribHour, maghribMinute, ishaHour, ishaMinute, fajrHourNext, fajrMinuteNext, nextPrayer; //Varibles which hold prayer times
 String prevPrayer;
-boolean athanStat = false;
 float direction;
 void directionEvent(float newDirection) {
   direction = newDirection;
@@ -37,6 +41,17 @@ Calendar viewWeek = Calendar.getInstance(); //Get calendar date
 Calendar event = Calendar.getInstance(); //Get calendar date
 
 void setup() {
+  sound = this.getActivity(); 
+  context = sound.getApplicationContext(); 
+  try { 
+    mp = new MediaPlayer(); 
+    afd = context.getAssets().openFd("Athan1.mp3");//which is in the data folder 
+    mp.setDataSource(afd.getFileDescriptor()); 
+    mp.prepare();
+  } 
+  catch(IOException e) { 
+    println("file did not load");
+  } 
   requestPermission("android.permission.READ_EXTERNAL_STORAGE", "doNothing");
   requestPermission("android.permission.WRITE_EXTERNAL_STORAGE", "downloadFile");//Setup Function
   checkForUpdates();
@@ -55,12 +70,12 @@ void setup() {
   compasss = loadImage("compass.png"); //Load the images
   prayer = loadImage("Clock.png");
   img = loadImage("CMPS.png");
-  athan = new SoundFile(this, "Athan1.wav"); //Loading the Athan sound
   loadTimes(); //Load the prayer times 
   delay(1000); //Delay which allows the user to read the loading text
   initWeekView();
 }
 void draw() { //Draw function
+  // println(mp.isPlaying());
   if (updateMode) {
     background(0);
     beginUpdate();
@@ -98,14 +113,17 @@ void mainScreen() { //The main screen function that draws the home screen
   image(prayer, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   image(compasss, width/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   pushMatrix();
-  translate(0,-50);
+  translate(0, -50);
   textFont(font, 21*displayDensity);
-  text(calDate, width/2, height/2-170); //Drawing hte date
+  text(calDate, width/2, sizeDeteccH(790, height)); //Drawing hte date
   textFont(font, 75*displayDensity);
   //Calculating current time
   int hour = hour();
   if (hour > 12) {
     hour -= 12; //Convert to 12-hour if necissary
+  }
+  if (hour == 0) {
+    hour = 12;
   }
   String min = str(minute());
   if (minute() < 10) {
@@ -119,23 +137,23 @@ void mainScreen() { //The main screen function that draws the home screen
   textFont(font, 20*displayDensity);
   checkPrayer(); //Check which prayer is next
   timeCalc(nextPrayerHour, nextPrayerMin, fajrStat); //Calculate time until next prayer
-  if (athanStat) {
-    text("Current Prayer: " + prevPrayer, width/2, height/2+70); //Draw the current prayer
+  if (mp.isPlaying()) {
+    text("Current Prayer: " + prevPrayer, width/2, sizeDeteccH(1030, height)); //Draw the current prayer
   } else {
-    text("Next Prayer: " + nextPrayer, width/2, height/2+70); //Draw the next prayer
+    text("Next Prayer: " + nextPrayer, width/2, sizeDeteccH(1030, height)); //Draw the next prayer
     textFont(font, 17*displayDensity);
-    text("At: " + nextPrayerHour + ":" + nextPrayerMinS, width/2, height/2+120); //Draw next prayer's time
-    text("(-" + return0Value(timeCalc(nextPrayerHour, nextPrayerMin, fajrStat)[0]) + ":" + return0Value(timeCalc(nextPrayerHour, nextPrayerMin, fajrStat)[1]) + ")", width/2, height/2+170); //Draw how much time is left
+    text("At: " + nextPrayerHour + ":" + nextPrayerMinS, width/2, sizeDeteccH(1080, height)); //Draw next prayer's time
+    text("(-" + return0Value(timeCalc(nextPrayerHour, nextPrayerMin, fajrStat)[0]) + ":" + return0Value(timeCalc(nextPrayerHour, nextPrayerMin, fajrStat)[1]) + ")", width/2, sizeDeteccH(1130, height)); //Draw how much time is left
     if (isSuhoorNext) {
       if (hour() == 0) {
-        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[0]) + ":" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[1]) + ")", width/2, height/2+215); //Draw how much time is left
+        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[0]) + ":" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[1]) + ")", width/2, sizeDeteccH(1175, height)); //Draw how much time is left
       } else if (hour() > 0 && hour < 5) {
-        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[0]) + ":" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[1]) + ")", width/2, height/2+215); //Draw how much time is left
+        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[0]) + ":" + return0Value(timeCalc(int(fajrHour), int(fajrMinute), true)[1]) + ")", width/2, sizeDeteccH(1175, height)); //Draw how much time is left
       } else {
-        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHourNext), int(fajrMinuteNext), true)[0]) + ":" + return0Value(timeCalc(int(fajrHourNext), int(fajrMinuteNext), true)[1]) + ")", width/2, height/2+215); //Draw how much time is left
+        text("Time until Fajr: (-" + return0Value(timeCalc(int(fajrHourNext), int(fajrMinuteNext), true)[0]) + ":" + return0Value(timeCalc(int(fajrHourNext), int(fajrMinuteNext), true)[1]) + ")", width/2, sizeDeteccH(1175, height)); //Draw how much time is left
       }
     } else {
-      text("Time until Maghrib: (-" + return0Value(timeCalc(int(maghribHour), int(maghribMinute), false)[0]) + ":" + return0Value(timeCalc(int(maghribHour), int(maghribMinute), fajrStat)[1]) + ")", width/2, height/2+215); //Draw how much time is left
+      text("Time until Maghrib: (-" + return0Value(timeCalc(int(maghribHour), int(maghribMinute), false)[0]) + ":" + return0Value(timeCalc(int(maghribHour), int(maghribMinute), fajrStat)[1]) + ")", width/2, sizeDeteccH(1175, height)); //Draw how much time is left
     }
   }
   popMatrix();
@@ -183,23 +201,23 @@ void prayerList() {
   textFont(font, 21*displayDensity);
   if (nextPrayer.equals("Fajr")) {
     fill(50, 130, 184);
-  } else if (prevPrayer.equals("Fajr") && athanStat) {
+  } else if (prevPrayer.equals("Fajr") && mp.isPlaying()) {
     fill(128, 0, 0);
   } else {
     fill(255);
   }
-  text("Fajr: " + fajrHour + ":" + fajrMinute, width/2, height/2-105); //Drawing Prayer times
+  text("Fajr: " + fajrHour + ":" + fajrMinute, width/2, sizeDeteccH(855, height)); //Drawing Prayer times
   if (nextPrayer.equals("Duhur")) {
     fill(50, 130, 184);
-  } else if (prevPrayer.equals("Duhur") && athanStat) {
+  } else if (prevPrayer.equals("Duhur") && mp.isPlaying()) {
     fill(128, 0, 0);
   } else {
     fill(255);
   }
-  text("Duhur: " + duhurHour + ":" + duhurMinute, width/2, height/2-52);
+  text("Duhur: " + duhurHour + ":" + duhurMinute, width/2, sizeDeteccH(908, height));
   if (nextPrayer.equals("Asr")) {
     fill(50, 130, 184);
-  } else if (prevPrayer.equals("Asr") && athanStat) {
+  } else if (prevPrayer.equals("Asr") && mp.isPlaying()) {
     fill(128, 0, 0);
   } else {
     fill(255);
@@ -207,20 +225,20 @@ void prayerList() {
   text("Asr: " + asrHour + ":" + asrMinute, width/2, height/2);
   if (nextPrayer.equals("Maghrib")) {
     fill(50, 130, 184);
-  } else if (prevPrayer.equals("Maghrib") && athanStat) {
+  } else if (prevPrayer.equals("Maghrib") && mp.isPlaying()) {
     fill(128, 0, 0);
   } else {
     fill(255);
   }
-  text("Maghrib: " + maghribHour + ":" + maghribMinute, width/2, height/2+52);
+  text("Maghrib: " + maghribHour + ":" + maghribMinute, width/2, sizeDeteccH(1012, height));
   if (nextPrayer.equals("Isha")) {
     fill(50, 130, 184);
-  } else if (prevPrayer.equals("Isha") && athanStat) {
+  } else if (prevPrayer.equals("Isha") && mp.isPlaying()) {
     fill(128, 0, 0);
   } else {
     fill(255);
   }
-  text("Isha: " + ishaHour + ":" + ishaMinute, width/2, height/2+105);
+  text("Isha: " + ishaHour + ":" + ishaMinute, width/2, sizeDeteccH(1065, height));
 }
 //Calculate Date in format which user can understand
 void date() {
@@ -282,8 +300,17 @@ void checkPrayer() { //Function which checks which prayer is next by using LOTS 
     nextPrayer = "Fajr";
     prevPrayer = "Isha";
     fajrStat = true;
-    nextPrayerHour = int(fajrHour);
-    nextPrayerMin = int(fajrMinute);
+    if (hour() == 0) {
+      nextPrayerHour = int(fajrHour);
+      nextPrayerMin = int(fajrMinute);
+    } else if (hour() > 0 && hour() < 5) {
+      nextPrayerHour = int(fajrHour);
+      nextPrayerMin = int(fajrMinute);
+    } else {
+      nextPrayerHour = int(fajrHourNext);
+      nextPrayerMin = int(fajrMinuteNext);
+    }
+
     if (hour() == int(fajrHour)) {
       if (minute() < int(fajrMinute)) {
         isSuhoorNext = true;
@@ -388,8 +415,8 @@ void checkPrayer() { //Function which checks which prayer is next by using LOTS 
         fajrStat = true;
         nextPrayer = "Fajr";
         prevPrayer = "Isha";
-        nextPrayerHour = int(fajrHour);
-        nextPrayerMin = int(fajrMinute);
+        nextPrayerHour = int(fajrHourNext);
+        nextPrayerMin = int(fajrMinuteNext);
       }
     }
   }
@@ -398,36 +425,18 @@ void playAthan() { //Function which checks whether its time to play the athan, a
   int hour = hour();
   if (hour > 12) { //Convert to 12 hour time (if necissary)
     hour -= 12;
-    println(hour);
   }
-  if (!athanStat) { //If the Athan is not playing
+  if (!mp.isPlaying()) { //If the Athan is not playing
     if (int(fajrHour) == hour && int(fajrMinute) == minute()) { //IF its fajr
-      athan.play(); //Play athan
-      athanStat = true;
+      mp.start(); //Play athan
     } else  if (int(duhurHour) == hour && int(duhurMinute) == minute()) { //If its duhur
-      athanStat = true;
-      athan.play(); //Play Athan
+      mp.start(); //Play Athan
     } else  if (int(asrHour) == hour && int(asrMinute) == minute()) { //If its asr 
-      athan.play(); //Play athan
-      athanStat = true;
+      mp.start(); //Play athan
     } else  if (int(maghribHour) == hour && int(maghribMinute) == minute()) { //If its maghtib
-      athan.play(); //Play Athan
-      athanStat = true;
+      mp.start(); //Play Athan
     } else  if (int(ishaHour) == hour && int(ishaMinute) == minute()) { //If its Isha
-      athan.play(); //Play Athan
-      athanStat = true;
-    }
-  } else {
-    if (int(fajrHour) != hour && int(fajrMinute) != minute()) { //IF its fajr
-      athanStat = false;
-    } else  if (int(duhurHour) != hour && int(duhurMinute) != minute()) { //If its duhur
-      athanStat = false;
-    } else  if (int(asrHour) != hour && int(asrMinute) != minute()) { //If its asr 
-      athanStat = false;
-    } else  if (int(maghribHour) != hour && int(maghribMinute) != minute()) { //If its maghtib
-      athanStat = false;
-    } else  if (int(ishaHour) != hour && int(ishaMinute) != minute()) { //If its Isha
-      athanStat = false;
+      mp.start(); //Play Athan
     }
   }
 }

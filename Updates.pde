@@ -144,22 +144,17 @@ boolean isGreater(String version) {
   version = version + ".0.0";
   String[] ww = split(version, '.');
   String[] w = split(ver1, '.');
-  println(version);
   try { 
 
     if (int(ww[0]) > int(w[0])) {
       return true;
     } else if (int(ww[1]) > int(w[1]) && int(ww[0]) == int(w[0])) {
-      println("1");
       return true;
     } else if (int(ww[2]) > int(w[2]) && int(ww[1]) == int(w[1]) && int(ww[0]) == int(w[0])) {
-      println("2");
-
       return true;
     }
   } 
   catch (Exception e) {
-    println("here");
     e.printStackTrace();
     return true;
   }

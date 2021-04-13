@@ -28,11 +28,9 @@ class WeekRect {
     text("Maghrib: " + P2, 335, 165);
   }
   void checkPos(float x, float y) {
-    println("in the function");
     if (x >= 10 && x <= width-20 && y >= ((id*200) + (height*0.145833333)) + transScale && y <= ((id*200) + (height*0.145833333) +transScale) + 180) {
       if (y < height -  height*0.102986612) {
         screenNumber = 4;
-        println(id);
         event = cal;
       }
     }

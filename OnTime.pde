@@ -6,22 +6,20 @@ void onTime (Calendar cal) {
   rect(0, 0, width, height*0.102986612);
   fill(255);
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
-  image(prayer, width/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
+  image(compasss, width/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
   text("TMMuslim DayCheck\u2122", width/2, height*0.0494444444 + 25); //Top Text
   text("Prayer Times for: " + months[cal.get(Calendar.MONTH) + 1] + " " + cal.get(Calendar.DAY_OF_MONTH), width/2, height/2-225);
   textFont(font, 21*displayDensity);
-  text("Fajr: " + times[0], width/2, height/2-105); //Drawing Prayer times
-  text("Duhur: " + times[1], width/2, height/2-52);
+  text("Fajr: " + times[0], width/2, sizeDeteccH(855, height)); //Drawing Prayer times
+  text("Duhur: " + times[1], width/2, sizeDeteccH(908, height));
   text("Asr: " + times[2], width/2, height/2);
-  text("Maghrib: " + times[3], width/2, height/2+52);
-  text("Isha: " + times[4], width/2, height/2+105);
+  text("Maghrib: " + times[3], width/2, sizeDeteccH(1012, height));
+  text("Isha: " + times[4], width/2, sizeDeteccH(1065, height));
 }
 
 String loadTimesOnTime(int day, String month) {
-  println(month);
-  println(day);
   String num = str(day);
   if (day < 10) {
     num = nf(day, 2); //Add 0 before number if necissary

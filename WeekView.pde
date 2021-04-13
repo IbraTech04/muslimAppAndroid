@@ -1,13 +1,13 @@
 import java.lang.Math;
-void mouseDragged() {    
-  toSubtract = (pmouseY-mouseY)*1.2;
+void mouseDragged(){
+  toSubtract = (pmouseY-mouseY)*1.25;
 }
 void weekView() {
 
   transScale -= toSubtract;
   if (toSubtract > 0) {
     if (toSubtract > 150) {
-      toSubtract-=15;
+      toSubtract-=3;
     } else {
       toSubtract-=2.5;
     }
@@ -16,7 +16,7 @@ void weekView() {
     }
   } else if (toSubtract < 0) {
     if (toSubtract < -150) {
-      toSubtract+=15;
+      toSubtract+=3;
     } else {
       toSubtract+=2.5;
     }
