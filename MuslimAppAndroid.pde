@@ -54,7 +54,11 @@ void setup() {
   } 
   requestPermission("android.permission.READ_EXTERNAL_STORAGE", "doNothing");
   requestPermission("android.permission.WRITE_EXTERNAL_STORAGE", "downloadFile");//Setup Function
-  checkForUpdates();
+  try {
+    checkForUpdates();
+  }
+  catch (Exception e) {
+  }
   gesture = new KetaiGesture(this);
   compass = new CompassManager(this);
   background(0); //Setting Background
