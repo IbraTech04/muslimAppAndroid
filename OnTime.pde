@@ -17,6 +17,11 @@ void onTime (Calendar cal) {
   text("Asr: " + times[2], width/2, height/2);
   text("Maghrib: " + times[3], width/2, sizeDeteccH(1012, height));
   text("Isha: " + times[4], width/2, sizeDeteccH(1065, height));
+  int startHour = int(split(times[0], ':'))[0];
+  int startMinute = int(split(times[0], ':'))[1];
+  int endHour = int(split(times[3], ':'))[0];
+  int endMinute = int(split(times[3], ':'))[1];
+  text("Total Fast Time: " + return0Value(timeCalc(endHour, endMinute, startHour, startMinute, false)[0]) + ":" + return0Value(timeCalc(endHour, endMinute, startHour, startMinute, false)[1]), width/2, sizeDeteccH(1118, height));
 }
 
 String loadTimesOnTime(int day, String month) {

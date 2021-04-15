@@ -239,6 +239,8 @@ void prayerList() {
     fill(255);
   }
   text("Isha: " + ishaHour + ":" + ishaMinute, width/2, sizeDeteccH(1065, height));
+  fill(255);
+  text("Total Fast Time: " + return0Value(timeCalc(int(maghribHour), int(maghribMinute), int(fajrHour), int(fajrMinute), false)[0]) + ":" + return0Value(timeCalc(int(maghribHour), int(maghribMinute), int(fajrHour), int(fajrMinute), false)[1]), width/2, sizeDeteccH(1118, height));
 }
 //Calculate Date in format which user can understand
 void date() {
@@ -498,6 +500,65 @@ int[] timeCalc(int prayerHour, int prayerMin, boolean fajr) { //Time calculation
     return new int[]{ localHourLeft, localMinLeft};
   }
 }
+
+int[] timeCalc(int prayerHour, int prayerMin, int startHour, int startMin, boolean fajr) { //Time calculation function (If you think im gonna bother explaining all the math you're insane)
+  int minute = startMin, hour = startHour; 
+  int localMinLeft = 0;
+  int localHourLeft = 0;
+  int localHours = prayerHour;
+  if (localHours < 12) {
+    println("here");
+    localHours +=12;
+  }
+  if (fajr) { //If we're calculating Fajr do this (This is because calculating Fajr is a bit more involved than other prayers)
+    if (hour == 0) {
+      localMinLeft = 60 - minute;
+      localHours --;
+      localMinLeft += int(prayerMin);
+      if (localMinLeft >= 60) {
+        localHourLeft ++;
+        localMinLeft = localMinLeft - 60;
+      }
+      localHourLeft += int(prayerHour);
+    } else if (hour > 0 && hour < 5) {
+      localMinLeft = 60 - minute;
+      localHourLeft --;
+      localMinLeft += int(prayerMin);
+      if (localMinLeft >= 60) {
+        localHourLeft ++;
+        localMinLeft = localMinLeft - 60;
+      }
+      localHourLeft = localHourLeft + (int(prayerHour) - hour());
+    } else {
+      localMinLeft = 60 - minute;
+      localHourLeft --;
+      localMinLeft += int(prayerMin);
+      if (localMinLeft >= 60) {
+        localHourLeft ++;
+        localMinLeft = localMinLeft - 60;
+      }
+      localHourLeft += 24 - hour;
+
+      localHourLeft += int(prayerHour);
+      if (localMinLeft >= 60) {
+        localHourLeft ++;
+        localMinLeft = localMinLeft - 60;
+      }
+    }
+    return new int[]{ localHourLeft, localMinLeft};
+  } else {//Otherwise proceed normally
+    localMinLeft = 60 - minute;
+    localHours --;
+    localMinLeft += prayerMin;
+    if (localMinLeft >= 60) {
+      localHourLeft ++;
+      localMinLeft = localMinLeft - 60;
+    }
+    localHourLeft = localHourLeft + ((localHours) - hour);
+    return new int[]{ localHourLeft, localMinLeft};
+  }
+}
+
 int returnGreaterThan(int input) {
   if (input < 12) {
     return input + 12;
