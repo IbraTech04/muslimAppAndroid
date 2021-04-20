@@ -435,13 +435,13 @@ void playAthan() { //Function which checks whether its time to play the athan, a
   if (!mp.isPlaying()) { //If the Athan is not playing
     if (int(fajrHour) == hour && int(fajrMinute) == minute()) { //IF its fajr
       mp.start(); //Play athan
-    } else  if (int(duhurHour) == hour && int(duhurMinute) == minute()) { //If its duhur
+    } else  if (returnGreaterThan(int(duhurHour)) == hour && int(duhurMinute) == minute()) { //If its duhur
       mp.start(); //Play Athan
-    } else  if (int(asrHour) == hour && int(asrMinute) == minute()) { //If its asr 
+    } else  if (returnGreaterThan(int(asrHour)) == hour && int(asrMinute) == minute()) { //If its asr 
       mp.start(); //Play athan
-    } else  if (int(maghribHour) == hour && int(maghribMinute) == minute()) { //If its maghtib
+    } else  if (returnGreaterThan(int(maghribHour)) == hour && int(maghribMinute) == minute()) { //If its maghtib
       mp.start(); //Play Athan
-    } else  if (int(ishaHour) == hour && int(ishaMinute) == minute()) { //If its Isha
+    } else  if (returnGreaterThan(int(ishaHour)) == hour && int(ishaMinute) == minute()) { //If its Isha
       mp.start(); //Play Athan
     }
   }
