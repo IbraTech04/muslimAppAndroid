@@ -13,14 +13,23 @@ TextView msg;
 int msgId;
 
 void checkForUpdates() {
-  nversionFromServer = loadStrings("https://raw.githubusercontent.com/IbraTech04/updateServer/master/muslimAppVers.txt");
-  if (isGreater(nversionFromServer[0])) {
-    if (nversionFromServer[1].equals("URGENT")) {
-      urgentUpdate();
-    } else {
-      update();
+  new Thread(new Runnable() {
+    public void run() {
+      try {
+        nversionFromServer = loadStrings("https://raw.githubusercontent.com/IbraTech04/updateServer/master/muslimAppVers.txt");
+        if (isGreater(nversionFromServer[0])) {
+          if (nversionFromServer[1].equals("URGENT")) {
+            urgentUpdate();
+          } else {
+            update();
+          }
+        }
+      }
+      catch (Exception e) {
+      }
     }
-  }
+  } 
+  ).start();
 }
 
 void doNothing(boolean granted) {
@@ -34,10 +43,10 @@ void beginUpdate() {
   if (updateState == 0) {
     textAlign(CENTER);
     textFont(font, 25*displayDensity); //Setting Text Font
-    text("Updating TMMuslim", width/2, height/2-26*displayDensity);
+    text("Updating tMuslim", width/2, height/2-26*displayDensity);
     textFont(font, 12*displayDensity); //Setting Text Font
     text("Stage One: Downloading Update Files", width/2, height/2);
-    text("Please do not close this \nwindow until this process is complete \nNote: TMMuslim updates may take more time than \nother apps", width/2, height/2+13*displayDensity);
+    text("Please do not close this \nwindow until this process is complete \nNote: tMuslim updates may take more time than \nother apps", width/2, height/2+13*displayDensity);
     updateState++;
   } else if (updateState == 1) {
     test = loadBytes("https://github.com/IbraTech04/updateServer/raw/master/muslimappandroid_release_signed_aligned.apk");
@@ -45,23 +54,23 @@ void beginUpdate() {
   } else if (updateState == 2) {
     background(0);
     textFont(font, 25*displayDensity); //Setting Text Font
-    text("Updating TMMuslim", width/2, height/2-26*displayDensity);
+    text("Updating tMuslim", width/2, height/2-26*displayDensity);
     textFont(font, 12*displayDensity); //Setting Text Font
     text("Stage Two: Applying Update", width/2, height/2);
     text("Please do not close this \nwindow until this process is complete", width/2, height/2+26*displayDensity);
     updateState++;
   } else if (updateState == 3) {
-    File theDir = new File(Environment.getExternalStorageDirectory() + "/TMMuslim");
+    File theDir = new File(Environment.getExternalStorageDirectory() + "/tMuslim");
     if (!theDir.exists()) {
       theDir.mkdirs();
     }
-    saveBytes(Environment.getExternalStorageDirectory() + "/TMMuslim/muslimApp" + nversionFromServer[0] + ".apk", test);
+    saveBytes(Environment.getExternalStorageDirectory() + "/tMuslim/muslimApp" + nversionFromServer[0] + ".apk", test);
     delay(2000);
     updateState++;
   } else if (updateState == 4) {
     background(0);
     textFont(font, 12*displayDensity); //Setting Text Font
-    text("File Downloaded. \nNavigate to Internal Storage > TMMuslim \nand select the latest APK", width/2, height/2+30);
+    text("File Downloaded. \nNavigate to Internal Storage > tMuslim \nand select the latest APK", width/2, height/2+30);
     updateState++;
   } else if (updateState == 5) {
     delay(10000); 

@@ -18,7 +18,7 @@ class WeekRect {
 
   public void drawRect() {
     fill(43, 88, 12);
-    rect(10, 10, width-20, 180, 10, 10, 10, 10);
+    rect(10, 10, width-20, 180, 15*displayDensity, 15*displayDensity, 15*displayDensity, 15*displayDensity);
     fill(255);
     textAlign(LEFT);
     textFont(font, 50); //Setting Text Font

@@ -2,14 +2,14 @@ void onTime (Calendar cal) {
   background(0);
   String[] times = split(loadTimesOnTime(cal.get(Calendar.DAY_OF_MONTH), months[cal.get(Calendar.MONTH) + 1]), '/');
   fill(43, 88, 12);
-  rect(0, height -  height*0.102986612, width, height); //These two are the two rectangles on the top and bottom
-  rect(0, 0, width, height*0.102986612);
+rect(0, height -  height*0.102986612, width, height, 20*displayDensity, 20*displayDensity, 0, 0); //These two are the two rectangles on the top and bottom
+  rect(0, 0, width, height*0.102986612, 0, 0, 15*displayDensity, 15*displayDensity);
   fill(255);
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
   image(compasss, width/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
-  text("TMMuslim DayCheck\u2122", width/2, height*0.0494444444 + 25); //Top Text
+  text("tMuslim DayCheck\u2122", width/2, height*0.0494444444 + 25); //Top Text
   text("Prayer Times for: " + months[cal.get(Calendar.MONTH) + 1] + " " + cal.get(Calendar.DAY_OF_MONTH), width/2, height/2-225);
   textFont(font, 21*displayDensity);
   text("Fajr: " + times[0], width/2, sizeDeteccH(855, height)); //Drawing Prayer times

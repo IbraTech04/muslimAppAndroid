@@ -1,6 +1,6 @@
 import java.lang.Math;
-void mouseDragged(){
-  toSubtract = (pmouseY-mouseY)*1.25;
+void mouseDragged() {
+  toSubtract = (pmouseY-mouseY)*1.7;
 }
 void weekView() {
 
@@ -50,16 +50,16 @@ void weekView() {
   noStroke();
   popMatrix();
   fill(43, 88, 12);
-  rect(0, height -  height*0.102986612, width, height); //These two are the two rectangles on the top and bottom
+  rect(0, height -  height*0.102986612, width, height, 20*displayDensity, 20*displayDensity, 0, 0); //These two are the two rectangles on the top and bottom
   imageMode(CENTER);
   //image(settingsp, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   //image(calendar, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
   //image(weekV, width/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
-  rect(0, 0, width, height*0.102986612);
+  rect(0, 0, width, height*0.102986612, 0, 0, 15*displayDensity, 15*displayDensity);
   fill(255);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
-  text("TMMuslim WeekView\u2122 Beta", width/2, height*0.0494444444 + 25); //Top Text
+  text("tMuslim WeekView\u2122 Beta", width/2, height*0.0494444444 + 25); //Top Text
   imageMode(CENTER); //Setting the image mode to Center
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
   image(prayer, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);

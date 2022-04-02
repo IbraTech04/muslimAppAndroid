@@ -41,6 +41,10 @@ Calendar viewWeek = Calendar.getInstance(); //Get calendar date
 Calendar event = Calendar.getInstance(); //Get calendar date
 
 void setup() {
+  background(0); //Setting Background
+  textSize(100); //Set text size
+  textAlign(CENTER);
+  text("tMuslim V" + ver, width/2, height/2); //Loading Text
   sound = this.getActivity(); 
   context = sound.getApplicationContext(); 
   try { 
@@ -64,7 +68,7 @@ void setup() {
   background(0); //Setting Background
   textSize(100); //Set text size
   textAlign(CENTER);
-  text("TMMuslim V" + ver, width/2, height/2); //Loading Text
+  text("tMuslim V" + ver, width/2, height/2); //Loading Text
   times = loadStrings("Annual Prayers.txt"); //Load the file with all the prayer times
   fullScreen();
   orientation(PORTRAIT);
@@ -106,12 +110,12 @@ void mainScreen() { //The main screen function that draws the home screen
   date();
   background(0);
   fill(43, 88, 12);
-  rect(0, height -  height*0.102986612, width, height); //These two are the two rectangles on the top and bottom
-  rect(0, 0, width, height*0.102986612);
+  rect(0, height -  height*0.102986612, width, height, 20*displayDensity, 20*displayDensity, 0, 0); //These two are the two rectangles on the top and bottom
+  rect(0, 0, width, height*0.102986612, 0, 0, 15*displayDensity, 15*displayDensity);
   fill(255);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
-  text("TMMuslim Home", width/2, height*0.0494444444 + 25); //Top Text
+  text("tMuslim Home", width/2, height*0.0494444444 + 25); //Top Text
   imageMode(CENTER); //Setting the image mode to Center
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
   image(prayer, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
@@ -166,12 +170,12 @@ void mainScreen() { //The main screen function that draws the home screen
 void qiblaDraw() {
   background(0);
   fill(43, 88, 12);
-  rect(0, height -  height*0.102986612, width, height); //Rectangles at top and bottom
-  rect(0, 0, width, height*0.102986612);
+  rect(0, height -  height*0.102986612, width, height, 20*displayDensity, 20*displayDensity, 0, 0); //Rectangles at top and bottom
+  rect(0, 0, width, height*0.102986612, 0, 0, 15*displayDensity, 15*displayDensity);
   fill(255);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
-  text("TMMuslim Qibla Locator", width/2, height*0.0494444444 + 25); //Top text
+  text("tMuslim Qibla Locator", width/2, height*0.0494444444 + 25); //Top text
   imageMode(CENTER);
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
   image(prayer, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
@@ -189,12 +193,12 @@ void qiblaDraw() {
 void prayerList() {
   background(0);
   fill(43, 88, 12);
-  rect(0, height -  height*0.102986612, width, height); //Rectangles at top and bottom
-  rect(0, 0, width, height*0.102986612);
+  rect(0, height -  height*0.102986612, width, height, 20*displayDensity, 20*displayDensity, 0, 0); //Rectangles at top and bottom
+  rect(0, 0, width, height*0.102986612, 0, 0, 15*displayDensity, 15*displayDensity);
   fill(255);
   textFont(font, 25*displayDensity); //Setting Text Font
   textAlign(CENTER);
-  text("TMMuslim Prayer List", width/2, height*0.0494444444 + 25); //Top text
+  text("tMuslim Prayer List", width/2, height*0.0494444444 + 25); //Top text
   imageMode(CENTER);
   image(home, height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2); //Icons for switching Screens
   image(prayer, width - height*0.102986612/2, height - height*0.102986612/2, height*0.102986612/2, height*0.102986612/2);
